@@ -128,7 +128,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CELERY_BEAT_SCHEDULER='django_celery_beat.schedulers:DatabaseScheduler'
-CELERY_TIMEZONE = "Europe/London"
+CELERY_TIMEZONE = "Europe/Moscow"
 
 
 REDIS_HOST = '127.0.0.1'

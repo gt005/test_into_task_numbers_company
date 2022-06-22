@@ -1,10 +1,12 @@
-from django.views.generic import TemplateView
 from .tasks import update_currency_rate, update_table_in_interval
+from .models import ProductTable
+
+from django.views.generic import ListView
 
 
-class MainView(TemplateView):
+class MainView(ListView):
+    model = ProductTable
     template_name = "main.html"
+    queryset = ProductTable.objects.all()
 
-    def get(self, *args, **kwargs):
-        update_table_in_interval.delay()
-        return super().get(*args, **kwargs)
+
