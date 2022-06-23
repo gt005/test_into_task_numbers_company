@@ -1,6 +1,5 @@
 from .models import *
 
-import hashlib
 from typing import Tuple
 from datetime import datetime
 
@@ -10,7 +9,7 @@ from mainapp.addons_python.currency_exporter import usdrub_currency_export
 
 
 @shared_task(bind=True)
-def update_table_in_interval(self):
+def update_table_in_interval(self) -> None:
     """ Получает актуальные данные из таблицы google и проверяет их на актуальность """
 
     data_rows_from_sheet: Tuple[Tuple[int, int, int, datetime], ...] = GoogleTableExporter().get_values()
@@ -47,7 +46,7 @@ def update_table_in_interval(self):
 
 
 @shared_task(bind=True)
-def update_currency_rate(self, currency_name: str):
+def update_currency_rate(self, currency_name: str) -> None:
     """ Данные из парсера сохраняет в таблицу последних значений валют  """
     current_currency_rate = usdrub_currency_export(currency_name)  # Получение курса цб по API цбрф
     row_with_needed_currency = CurrenciesRates.objects.filter(currency_name='USD')  # Поиск существуещего значения
@@ -56,6 +55,14 @@ def update_currency_rate(self, currency_name: str):
             currency_name='USD',
             rate=current_currency_rate
         ).save()
-    else:
+    elif row_with_needed_currency[0].rate != current_currency_rate:
+        update_currency_in_table(current_currency_rate)  # Пересчитываем по новому курсу стоимость всех продуктов
         row_with_needed_currency[0].rate = current_currency_rate
         row_with_needed_currency[0].save()
+
+
+def update_currency_in_table(new_rate: float) -> None:
+    """ Функция пересчитывает колонну со стоимостью в рублях по курсу new_rate """
+    for product in ProductTable.objects.all():
+        product.cost_rubles = product.cost_dollars * new_rate
+        product.save()
