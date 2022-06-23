@@ -8,7 +8,46 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
+
+<style>
+    .table_container{
+        justify-content: center;
+        margin-top: 50px;
+        display: flex;
+    }
+    th, td {
+        padding: 10px 25px;
+    }
+</style>
+
 <body>
-{{ object_list }}
+
+<main>
+<div class="table_container">
+    <table>
+
+        <caption><h3>Продукты</h3></caption>
+        <tr>
+            <th>№</th>
+            <th>заказ №</th>
+            <th>стоимость,$</th>
+            <th>стоимость в руб.</th>
+            <th>срок поставки</th>
+        </tr>
+        {% for object in object_list %}
+            <tr>
+                <td>{{ object.record_number }}</td>
+                <td>{{ object.order_number }}</td>
+                <td>{{ object.cost_dollars }}</td>
+                <td>{{ object.cost_rubles }}</td>
+                <td>{{ object.delivery_time }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+</div>
+
+</main>
+
 </body>
 </html>
