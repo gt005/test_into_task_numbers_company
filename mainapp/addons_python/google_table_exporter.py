@@ -37,16 +37,18 @@ class GoogleTableExporter:
 
     def get_values(self) -> Tuple[Tuple[int, int, int, datetime], ...]:
         """
-        Получает данные по __export_data_from_sheet и обрабатывает их, приводя ячейки к нужным типам данных
+        Получает данные по __export_data_from_sheet и обрабатывает их, приводя ячейки к нужным типам данных.
+        Удаляет строку с заголовком таблицы
         :return: Кортеж из строк файла
         """
-        raw_values = self.__export_data_from_sheet()
+        raw_values = self.__export_data_from_sheet().get('values')
+        raw_values.pop(0)
 
         data_with_correct_types = tuple(
             (
                 (int(table_row[0]), int(table_row[1]),
                  int(table_row[2]), datetime.strptime(table_row[3], '%d.%m.%Y'))
-                for table_row in raw_values.get('values')[1:]
+                for table_row in raw_values
             )
         )
         return data_with_correct_types

@@ -14,11 +14,11 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 app.conf.beat_schedule = {
     'update_table_every_5_min': {
         'task': 'mainapp.tasks.update_table_in_interval',
-        'schedule': crontab(minute='*/100'),
+        'schedule': crontab(minute='*/5'),
     },
     'update_currency_rate_every_day': {
         'task': 'mainapp.tasks.update_currency_rate',
-        'schedule': crontab(hour=2, minute=10),  # ЦБРФ выпускает релиз курса на день в 11 30 по мск
+        'schedule': crontab(hour='*/4'),  # ЦБРФ выпускает релиз курса на день в 11 30 по мск
         'args': ('usd',),
     },
 }
