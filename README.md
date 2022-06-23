@@ -4,6 +4,8 @@
 
 Должен быть установлен Redis (запускалось на версии 5.0.7)
 
+Ссылка на Google Sheet https://docs.google.com/spreadsheets/d/1UDh6xIR9k_Dt6dKpdnqY7hZ7YQe6zD0Dmv9-s9gHJyg/
+
 Для установки нужных пакетов в систему
 ```
 sudo apt-get update
